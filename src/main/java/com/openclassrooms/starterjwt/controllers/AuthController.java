@@ -29,11 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        try {
-            MessageResponse response = this.authService.register(signUpRequest);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        MessageResponse response = this.authService.register(signUpRequest);
+        return ResponseEntity.ok(response);
     }
 }

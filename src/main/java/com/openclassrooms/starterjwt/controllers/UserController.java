@@ -3,7 +3,6 @@ package com.openclassrooms.starterjwt.controllers;
 import com.openclassrooms.starterjwt.mapper.UserMapper;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.services.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,35 +26,25 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
-        try {
-            User user = this.userService.findById(Long.valueOf(id));
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        User user = this.userService.findById(id);
 
-            if (user == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok().body(this.userMapper.toDto(user));
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
+        if (user == null) {
+            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.ok().body(this.userMapper.toDto(user));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> save(@PathVariable("id") String id) {
-        try {
-            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<?> save(@PathVariable("id") Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            boolean deleted = this.userService.deleteIfOwner(Long.parseLong(id), userDetails.getUsername());
-            if (!deleted) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        boolean deleted = this.userService.deleteIfOwner(id, userDetails.getUsername());
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.ok().build();
     }
 }

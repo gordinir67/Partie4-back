@@ -34,18 +34,14 @@ public class SessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
-        try {
-            Session session = this.sessionService.getById(Long.valueOf(id));
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        Session session = this.sessionService.getById(id);
 
-            if (session == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
+        if (session == null) {
+            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
     }
 
     @GetMapping()
@@ -66,48 +62,32 @@ public class SessionController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable("id") String id, @Valid @RequestBody SessionDto sessionDto) {
-        try {
-            Session session = this.sessionService.update(Long.parseLong(id), this.sessionMapper.toEntity(sessionDto));
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody SessionDto sessionDto) {
+        Session session = this.sessionService.update(id, this.sessionMapper.toEntity(sessionDto));
 
-            return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> save(@PathVariable("id") String id) {
-        try {
-            boolean deleted = this.sessionService.deleteIfExists(Long.parseLong(id));
-            if (!deleted) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> save(@PathVariable("id") Long id) {
+        boolean deleted = this.sessionService.deleteIfExists(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("{id}/participate/{userId}")
-    public ResponseEntity<?> participate(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-        try {
-            this.sessionService.participate(Long.parseLong(id), Long.parseLong(userId));
+    public ResponseEntity<?> participate(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        this.sessionService.participate(id, userId);
 
-            return ResponseEntity.ok().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}/participate/{userId}")
-    public ResponseEntity<?> noLongerParticipate(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-        try {
-            this.sessionService.noLongerParticipate(Long.parseLong(id), Long.parseLong(userId));
+    public ResponseEntity<?> noLongerParticipate(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        this.sessionService.noLongerParticipate(id, userId);
 
-            return ResponseEntity.ok().build();
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().build();
     }
 }
