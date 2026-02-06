@@ -36,8 +36,8 @@ class AuthControllerIT extends AbstractIntegrationTest {
     void register_shouldCreateAccount() throws Exception {
         SignupRequest req = new SignupRequest();
         req.setEmail("a@a.com");
-        req.setFirstName("John");
-        req.setLastName("Doe");
+        req.setFirstName("Benj");
+        req.setLastName("Luc");
         req.setPassword("password");
 
         mockMvc.perform(post("/api/auth/register")
@@ -52,7 +52,7 @@ class AuthControllerIT extends AbstractIntegrationTest {
         // manque password + lastName etc.
         SignupRequest req = new SignupRequest();
         req.setEmail("a@a.com");
-        req.setFirstName("John");
+        req.setFirstName("Benj");
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

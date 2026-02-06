@@ -133,3 +133,29 @@ Importez la collection Postman
 La documentation de Postman se trouve ici :
 
 https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
+
+## Lancer les tests
+
+## Exécuter uniquement les tests unitaires
+
+    ```
+    mvn test
+    ```
+
+## Exécuter uniquement les tests d’intégration
+
+    ```
+    mvn failsafe:integration-test failsafe:verify
+    ```
+
+## Exécuter tous les tests et générer le rapport
+
+    ```
+    mvn clean verify
+    ```
+
+## Consulter le rapport HTML
+
+    ```
+    target/site/jacoco/index.html
+    ```
